@@ -4,159 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>30-Day Workout Tracker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-        }
-        .navigation {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .navigation button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .navigation button:hover {
-            background-color: #0056b3;
-        }
-        .exercise {
-            margin-bottom: 20px;
-        }
-        .exercise input {
-            margin-top: 5px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .calendar div {
-            padding: 10px;
-            background: #e4e4e4;
-            text-align: center;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .calendar div.completed {
-            background: #28a745;
-            color: white;
-        }
-    </style>
+    <!-- TailwindCSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <header>
-        <h1>30-Day Workout Tracker</h1>
+<body class="bg-gradient-to-r from-blue-500 to-purple-500 text-white min-h-screen">
+    <header class="bg-gray-800 text-white py-4 shadow-md">
+        <h1 class="text-center text-3xl font-bold">30-Day Workout Tracker</h1>
     </header>
-    <div class="container">
-        <div class="navigation">
-            <button id="previous-day">Previous Day</button>
-            <span id="day-title">Day 1: Upper Body Push</span>
-            <button id="next-day">Next Day</button>
+    <div class="container mx-auto mt-8 p-6 bg-white text-gray-800 rounded-lg shadow-lg">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <button id="previous-day" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">Previous Day</button>
+            <span id="day-title" class="text-xl font-semibold">Day 1: Upper Body Push</span>
+            <button id="next-day" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">Next Day</button>
         </div>
-        <h2>Exercise Options</h2>
-        <select id="exercise-option">
+
+        <!-- Exercise Options -->
+        <h2 class="text-2xl font-bold mb-4">Exercise Options</h2>
+        <select id="exercise-option" class="w-full border border-gray-300 rounded-lg py-2 px-4 mb-6">
             <option value="resistance-bands">Resistance Bands</option>
             <option value="gym-equipment">Gym Equipment</option>
         </select>
-        <div id="exercise-list"></div>
-        <button id="save-progress">Save Progress</button>
-        <h2>Calendar</h2>
-        <div id="calendar"></div>
+        <div id="exercise-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+        <!-- Save Progress -->
+        <button id="save-progress" class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded shadow">Save Progress</button>
+
+        <!-- Calendar -->
+        <h2 class="text-2xl font-bold mt-8">Calendar</h2>
+        <div id="calendar" class="grid grid-cols-7 gap-4 mt-4"></div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const weeklyWorkouts = [
                 {
-                    day: "Day 1: Upper Body Push",
+                    day: "Upper Body Push",
                     exercises: {
                         "resistance-bands": [
                             { name: "Resistance Band Push-Ups", sets: 4, reps: "12-15" },
                             { name: "Resistance Band Shoulder Press", sets: 3, reps: "10-12" },
-                            { name: "Resistance Band Tricep Dips", sets: 3, reps: "12-15" },
-                            { name: "Resistance Band Chest Flys (Lying)", sets: 3, reps: "10-12" },
-                            { name: "Plank-to-Push-Up", sets: 3, reps: "10" }
+                            { name: "Resistance Band Tricep Dips", sets: 3, reps: "12-15" }
                         ],
                         "gym-equipment": [
                             { name: "Barbell Bench Press", sets: 4, reps: "8-10" },
                             { name: "Incline Dumbbell Press", sets: 3, reps: "10-12" },
-                            { name: "Barbell Overhead Shoulder Press", sets: 3, reps: "8-10" },
-                            { name: "Lateral Raises (With Dumbbells)", sets: 3, reps: "12-15" },
-                            { name: "Overhead Dumbbell Tricep Extension", sets: 3, reps: "12-15" }
+                            { name: "Overhead Shoulder Press", sets: 3, reps: "8-10" }
                         ]
                     }
                 },
                 {
-                    day: "Day 2: Lower Body Strength",
+                    day: "Lower Body Strength",
                     exercises: {
                         "resistance-bands": [
                             { name: "Resistance Band Squats", sets: 4, reps: "12-15" },
-                            { name: "Resistance Band Romanian Deadlifts", sets: 3, reps: "10-12" },
-                            { name: "Resistance Band Step-Out Lunges", sets: 3, reps: "12 per leg" },
-                            { name: "Glute Bridges with Resistance Band", sets: 4, reps: "12-15" },
-                            { name: "Calf Raises (Bodyweight)", sets: 3, reps: "15-20" }
+                            { name: "Romanian Deadlifts", sets: 3, reps: "10-12" },
+                            { name: "Step-Out Lunges", sets: 3, reps: "12 per leg" }
                         ],
                         "gym-equipment": [
                             { name: "Barbell Back Squats", sets: 4, reps: "8-12" },
-                            { name: "Romanian Deadlifts (Using Barbell)", sets: 4, reps: "10-12" },
-                            { name: "Bulgarian Split Squats", sets: 3, reps: "10-12 per leg" },
-                            { name: "Glute Bridges with Dumbbell on Hips", sets: 4, reps: "12-15" },
-                            { name: "Standing Barbell Calf Raises", sets: 3, reps: "15-20" }
+                            { name: "Barbell Deadlifts", sets: 4, reps: "10-12" },
+                            { name: "Split Squats", sets: 3, reps: "10-12 per leg" }
                         ]
                     }
                 },
                 {
-                    day: "Day 3: Rest or Active Recovery",
+                    day: "Active Recovery",
                     exercises: {
                         "resistance-bands": [],
                         "gym-equipment": []
-                    }
-                },
-                {
-                    day: "Day 4: Upper Body Pull",
-                    exercises: {
-                        "resistance-bands": [
-                            { name: "Resistance Band Rows", sets: 4, reps: "12-15" },
-                            { name: "Resistance Band Face Pulls", sets: 3, reps: "12-15" },
-                            { name: "Resistance Band Bicep Curls", sets: 3, reps: "10-12" },
-                            { name: "Lat Pullover with Resistance Band", sets: 3, reps: "10-12" },
-                            { name: "Superman Holds", sets: 3, reps: "Hold for 30 seconds" }
-                        ],
-                        "gym-equipment": [
-                            { name: "Barbell Rows", sets: 4, reps: "8-12" },
-                            { name: "Rear Delt Flys", sets: 3, reps: "12-15" },
-                            { name: "Barbell Bicep Curls", sets: 3, reps: "10-12" },
-                            { name: "Dumbbell Pullover", sets: 3, reps: "10-12" },
-                            { name: "Superman Holds", sets: 3, reps: "Hold for 30 seconds" }
-                        ]
                     }
                 }
             ];
@@ -165,12 +83,13 @@
             for (let i = 1; i <= 30; i++) {
                 const workout = weeklyWorkouts[(i - 1) % weeklyWorkouts.length];
                 dayData[i] = {
-                    title: workout.day,
+                    title: `Day ${i}: ${workout.day}`,
                     exercises: workout.exercises
                 };
             }
 
             let currentDay = 1;
+            const completedDays = new Set();
             const dayTitle = document.getElementById("day-title");
             const exerciseOption = document.getElementById("exercise-option");
             const exerciseListDiv = document.getElementById("exercise-list");
@@ -185,19 +104,20 @@
             function displayExercises(option) {
                 const dayInfo = dayData[currentDay];
                 exerciseListDiv.innerHTML = '';
-                if (!dayInfo.exercises[option]) {
-                    exerciseListDiv.innerHTML = '<p>No exercises available for this option.</p>';
+                if (!dayInfo.exercises[option].length) {
+                    exerciseListDiv.innerHTML = '<p class="text-gray-500">No exercises for this day.</p>';
                     return;
                 }
                 dayInfo.exercises[option].forEach((exercise, index) => {
                     const exerciseDiv = document.createElement("div");
-                    exerciseDiv.classList.add("exercise");
-                    exerciseDiv.innerHTML = `<strong>${exercise.name}</strong> (Sets: ${exercise.sets}, Reps: ${exercise.reps})`;
+                    exerciseDiv.classList.add("bg-gray-100", "p-4", "rounded-lg", "shadow-md", "hover:shadow-lg", "transition");
+                    exerciseDiv.innerHTML = `<h3 class="text-lg font-semibold mb-2">${exercise.name}</h3>
+                        <p class="text-sm mb-4">Sets: ${exercise.sets} | Reps: ${exercise.reps}</p>`;
                     for (let i = 1; i <= exercise.sets; i++) {
                         exerciseDiv.innerHTML += `
-                            <label for="set-${index}-${i}">Set ${i}:</label>
-                            <input type="number" id="set-${index}-${i}-reps" placeholder="Reps">
-                            <input type="number" id="set-${index}-${i}-kg" placeholder="Kg">
+                            <label class="block text-sm font-medium mb-1">Set ${i}</label>
+                            <input type="number" placeholder="Reps" class="w-full border rounded-lg p-2 mb-2">
+                            <input type="number" placeholder="Kg" class="w-full border rounded-lg p-2">
                         `;
                     }
                     exerciseListDiv.appendChild(exerciseDiv);
@@ -222,15 +142,30 @@
                 displayExercises(exerciseOption.value);
             });
 
+            document.getElementById("save-progress").addEventListener("click", () => {
+                completedDays.add(currentDay);
+                lockInputs();
+                renderCalendar();
+            });
+
+            function lockInputs() {
+                const inputs = exerciseListDiv.querySelectorAll("input");
+                inputs.forEach(input => input.setAttribute("disabled", "true"));
+            }
+
             function renderCalendar() {
                 calendarDiv.innerHTML = '';
                 for (let i = 1; i <= 30; i++) {
                     const dayDiv = document.createElement("div");
                     dayDiv.textContent = `Day ${i}`;
-                    dayDiv.onclick = () => {
+                    dayDiv.classList.add("bg-gray-100", "p-3", "rounded-lg", "shadow", "hover:bg-blue-500", "hover:text-white", "transition", "text-center", "cursor-pointer");
+                    if (completedDays.has(i)) {
+                        dayDiv.classList.add("bg-green-500", "text-white");
+                    }
+                    dayDiv.addEventListener("click", () => {
                         currentDay = i;
                         updateDayContent();
-                    };
+                    });
                     calendarDiv.appendChild(dayDiv);
                 }
             }
